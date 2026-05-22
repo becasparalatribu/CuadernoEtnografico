@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cuaderno Etnográfico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gd:#1E3A2F;--gm:#2D6A4F;--gp:#1A3328;
+  --am:#B85C38;--pu:#7B5EA7;--bl:#2A5A8C;
+  --cr:#F5EDD4;--cl:#FEFAF2;--cb:#C4B49A;--cb2:#D4C9B0;
+  --tx:#1C1C14;--tm:#5C5040;--tf:#8A7A68;--tu:#B0A28E;
+}
+body{font-family:'Lora',serif;background:var(--cr);}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--cb);border-radius:3px}
+
+.app{min-height:100vh;display:flex;flex-direction:column;
+  background:var(--cr);
+  background-image:radial-gradient(ellipse at 15% 85%,rgba(180,120,60,.07) 0%,transparent 55%),
+                   radial-gradient(ellipse at 85% 15%,rgba(45,106,79,.06) 0%,transparent 55%);}
+
+.hdr{display:flex;align-items:center;gap:.8rem;padding:.7rem 1.2rem;
+  border-bottom:1px solid var(--cb);background:rgba(245,237,212,.96);
+  backdrop-filter:blur(10px);position:sticky;top:0;z-index:50;flex-wrap:wrap;}
+.hdr-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;
+  color:var(--tx);letter-spacing:.04em;white-space:nowrap;}
+.hdr-title em{color:var(--am);font-style:italic;}
+.hdr-sub{font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--tf);
+  letter-spacing:.12em;text-transform:uppercase;flex:1;white-space:nowrap;}
+.hdr-status{font-family:'IBM Plex Mono',monospace;font-size:.55rem;color:var(--tf);
+  letter-spacing:.08em;display:flex;align-items:center;gap:.35rem;}
+.status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;transition:background .3s;}
+
+.layout{display:grid;grid-template-columns:185px 1fr;flex:1;min-height:0;
+  height:calc(100vh - 48px);}
+@media(max-width:900px){.layout{grid-template-columns:155px 1fr;}}
+@media(max-width:640px){.layout{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:auto;min-height:calc(100vh - 48px);}}
+
+.sidebar{background:var(--gp);display:flex;flex-direction:column;
+  padding:1rem 0;gap:.05rem;overflow-y:auto;}
+@media(max-width:640px){
+  .sidebar{flex-direction:row;flex-wrap:nowrap;padding:.4rem .3rem;
+    gap:0;overflow-x:auto;overflow-y:hidden;}
+}
+.s-sec{font-family:'IBM Plex Mono',monospace;font-size:.5rem;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(245,237,212,.28);padding:.5rem 1rem .25rem;}
+.s-div{border:none;border-top:1px solid rgba(245,237,212,.08);margin:.3rem .9rem;}
+.s-btn{display:flex;align-items:center;gap:.55rem;padding:.65rem .9rem;
+  cursor:pointer;background:none;border:none;border-left:2.5px solid transparent;
+  width:100%;text-align:left;transition:background .12s,border-color .12s;color:inherit;}
+.s-btn:hover{background:rgba(245,237,212,.06);}
+.s-btn.active{background:rgba(245,237,212,.1);border-left-color:var(--am);}
+@media(max-width:640px){
+  .s-btn{flex-direction:column;gap:.2rem;padding:.5rem .6rem;border-left:none;
+    border-bottom:2.5px solid transparent;min-width:56px;align-items:center;}
+  .s-btn.active{border-left:none;border-bottom-color:var(--am);}
+  .s-sec,.s-div,.s-footer,.s-sub{display:none;}
+}
+.s-sym{font-size:.95rem;width:18px;text-align:center;flex-shrink:0;}
+.s-texts{display:flex;flex-direction:column;gap:.05rem;}
+.s-name{font-family:'Cormorant Garamond',serif;font-size:.88rem;color:#E8DFC8;line-height:1.1;}
+.s-sub{font-family:'IBM Plex Mono',monospace;font-size:.5rem;color:rgba(245,237,212,.42);
+  letter-spacing:.08em;text-transform:uppercase;}
+.s-badge{margin-left:auto;background:rgba(184,92,56,.35);color:#E8C4A8;
+  font-family:'IBM Plex Mono',monospace;font-size:.52rem;padding:.1rem .35rem;
+  border-radius:10px;flex-shrink:0;}
+@media(max-width:640px){.s-texts{display:none;}.s-badge{display:none;}}
+.s-footer{margin-top:auto;padding:.9rem 1rem .4rem;
+  border-top:1px solid rgba(245,237,212,.08);
+  font-family:'IBM Plex Mono',monospace;font-size:.5rem;color:rgba(245,237,212,.22);
+  letter-spacing:.07em;line-height:1.7;}
+
+.content{display:flex;flex-direction:column;overflow:hidden;min-height:0;}
+
+/* tool view */
+.tool-view{display:grid;grid-template-rows:auto 1fr;height:100%;overflow:hidden;}
+.input-zone{padding:1rem 1.4rem .8rem;border-bottom:1px solid var(--cb2);
+  background:rgba(245,237,212,.5);}
+.zone-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.65rem;flex-wrap:wrap;gap:.4rem;}
+.zone-title{display:flex;align-items:center;gap:.55rem;
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;color:var(--tx);}
+.zone-title em{font-style:italic;color:var(--tf);font-size:.9em;}
+.zone-hint{font-family:'IBM Plex Mono',monospace;font-size:.55rem;color:var(--tu);letter-spacing:.07em;}
+.field-ta{width:100%;min-height:90px;padding:.75rem .9rem;
+  font-family:'IBM Plex Mono',monospace;font-size:.78rem;line-height:1.72;color:var(--tx);
+  background:var(--cl);border:1px solid var(--cb);border-radius:4px;
+  resize:vertical;outline:none;transition:border-color .15s,box-shadow .15s;}
+.field-ta::placeholder{color:#BFB3A0;}
+.field-ta:focus{border-color:var(--gm);box-shadow:0 0 0 3px rgba(45,106,79,.07);}
+.zone-actions{display:flex;align-items:center;justify-content:space-between;margin-top:.5rem;flex-wrap:wrap;gap:.4rem;}
+.submit-btn{padding:.45rem 1.2rem;background:var(--gd);color:var(--cr);border:none;
+  cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:.85rem;letter-spacing:.07em;
+  border-radius:3px;display:flex;align-items:center;gap:.45rem;transition:background .12s;}
+.submit-btn:hover:not(:disabled){background:var(--gm);}
+.submit-btn:disabled{opacity:.45;cursor:default;}
+
+.output-zone{display:grid;grid-template-columns:1fr 230px;overflow-y:auto;
+  padding:1.2rem 1.4rem;gap:1.2rem;align-content:start;}
+@media(max-width:900px){.output-zone{grid-template-columns:1fr;}}
+.out-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;}
+.out-label{font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--tf);}
+.copy-btn{padding:.22rem .6rem;border:1px solid var(--cb2);background:transparent;
+  color:var(--tf);cursor:pointer;font-family:'IBM Plex Mono',monospace;
+  font-size:.55rem;letter-spacing:.1em;border-radius:3px;text-transform:uppercase;
+  transition:all .12s;}
+.copy-btn:hover{background:var(--gd);color:var(--cr);border-color:var(--gd);}
+.out-card{background:var(--cl);border:1px solid var(--cb);border-radius:5px;padding:1.2rem;min-height:140px;}
+.out-empty{display:flex;align-items:center;justify-content:center;}
+
+.hist-panel{display:flex;flex-direction:column;}
+.hist-label{font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--tf);margin-bottom:.5rem;padding-bottom:.35rem;
+  border-bottom:1px solid #E0D5C0;}
+.hist-item{padding:.55rem .65rem;border:1px solid #E0D5C0;border-radius:4px;
+  margin-bottom:.35rem;cursor:pointer;transition:all .12s;background:rgba(254,250,242,.5);}
+.hist-item:hover{border-color:var(--gm);background:var(--cl);}
+.hist-mode{font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--am);}
+.hist-time{font-family:'IBM Plex Mono',monospace;font-size:.55rem;color:#C4B49A;}
+.hist-preview{font-family:'Lora',serif;font-size:.7rem;color:var(--tm);font-style:italic;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;line-height:1.4;margin-top:.2rem;}
+
+.alt-view{padding:1.3rem 1.5rem;overflow-y:auto;flex:1;}
+.alt-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;
+  color:var(--tx);letter-spacing:.03em;margin-bottom:.2rem;}
+.alt-sub{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--tf);margin-bottom:1.3rem;}
+
+.dots{display:flex;gap:4px;align-items:center;}
+.dot{width:5px;height:5px;background:var(--am);border-radius:50%;
+  animation:dotP 1.1s ease-in-out infinite;}
+.dot:nth-child(2){animation-delay:.18s;}
+.dot:nth-child(3){animation-delay:.36s;}
+@keyframes dotP{0%,80%,100%{transform:scale(.65);opacity:.35}40%{transform:scale(1);opacity:1}}
+.cursor-blink{display:inline-block;width:2px;height:.9em;background:var(--am);
+  margin-left:1px;vertical-align:text-bottom;animation:blink .75s step-end infinite;}
+@keyframes blink{50%{opacity:0}}
+.err{padding:.6rem .85rem;background:rgba(184,92,56,.07);border:1px solid rgba(184,92,56,.25);
+  border-radius:4px;color:var(--am);font-family:'IBM Plex Mono',monospace;
+  font-size:.7rem;margin-bottom:.7rem;}
+
+.md-sec{font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:.6rem;
+  color:var(--gm);letter-spacing:.14em;text-transform:uppercase;
+  border-bottom:1px solid var(--cb2);padding-bottom:.25em;margin-bottom:.4em;}
+.md-bul{display:flex;gap:.6em;margin-bottom:.3em;padding-left:.3em;}
+.md-dot{color:var(--am);margin-top:.15em;flex-shrink:0;font-size:.8em;}
+
+/* doc view */
+.doc-view{display:grid;grid-template-columns:1fr 285px;height:100%;overflow:hidden;}
+@media(max-width:900px){.doc-view{grid-template-columns:1fr;}}
+.doc-reader{display:flex;flex-direction:column;border-right:1px solid var(--cb2);overflow:hidden;}
+.doc-toolbar{display:flex;align-items:center;gap:.5rem;padding:.65rem 1rem;
+  border-bottom:1px solid var(--cb2);background:rgba(245,237,212,.7);flex-wrap:wrap;}
+.doc-toolbar-title{font-family:'Cormorant Garamond',serif;font-size:.92rem;color:var(--tx);
+  flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.dtb{padding:.26rem .6rem;font-family:'IBM Plex Mono',monospace;font-size:.55rem;
+  letter-spacing:.08em;text-transform:uppercase;border-radius:3px;cursor:pointer;
+  transition:all .12s;white-space:nowrap;border:1px solid;}
+.dtb.outline{background:transparent;border-color:var(--cb2);color:var(--tf);}
+.dtb.outline:hover{border-color:var(--gm);color:var(--gm);}
+.dtb.hl-off{background:rgba(255,220,100,.3);border-color:rgba(200,160,0,.3);color:#7A5A00;}
+.dtb.hl-on{background:rgba(255,220,100,.9);border-color:rgba(200,160,0,.7);color:#5A3A00;}
+.dtb.code-off{background:rgba(45,106,79,.08);border-color:rgba(45,106,79,.25);color:var(--gm);}
+.dtb.code-on{background:rgba(45,106,79,.25);border-color:var(--gm);color:var(--gd);}
+.dtb.primary{background:var(--gd);border-color:var(--gd);color:var(--cr);}
+.dtb.primary:hover{background:var(--gm);}
+.dtb.danger{background:transparent;border-color:rgba(184,92,56,.3);color:var(--am);}
+.doc-body{flex:1;overflow-y:auto;padding:1.8rem 2.2rem;
+  font-family:'Lora',serif;font-size:.9rem;line-height:1.9;color:var(--tx);
+  user-select:text;background:var(--cl);}
+.doc-body p{margin-bottom:.8em;}
+mark.hl-y{background:rgba(255,220,50,.45);border-radius:2px;cursor:pointer;}
+mark.hl-y:hover{background:rgba(255,220,50,.7);}
+mark.hl-g{background:rgba(45,106,79,.18);border-radius:2px;border-bottom:2px solid rgba(45,106,79,.5);cursor:pointer;}
+mark.hl-g:hover{background:rgba(45,106,79,.28);}
+.code-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.58rem;
+  letter-spacing:.06em;text-transform:uppercase;background:rgba(45,106,79,.12);
+  color:var(--gm);border:1px solid rgba(45,106,79,.3);border-radius:10px;
+  padding:0 5px;margin-left:3px;vertical-align:middle;cursor:pointer;line-height:1.6;}
+.code-tag:hover{background:rgba(45,106,79,.22);}
+
+.annot-panel{display:flex;flex-direction:column;overflow:hidden;background:var(--cr);}
+.annot-hdr{padding:.7rem .9rem;border-bottom:1px solid var(--cb2);background:rgba(245,237,212,.7);}
+.annot-hdr-title{font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--tf);margin-bottom:.15rem;}
+.annot-tabs{display:flex;gap:.2rem;margin-top:.35rem;}
+.ann-tab{font-family:'IBM Plex Mono',monospace;font-size:.53rem;letter-spacing:.08em;
+  text-transform:uppercase;padding:.18rem .55rem;border-radius:2px;cursor:pointer;
+  border:1px solid transparent;transition:all .1s;color:var(--tf);}
+.ann-tab.active{background:var(--gd);color:var(--cr);border-color:var(--gd);}
+.ann-tab:not(.active):hover{border-color:var(--cb);color:var(--tx);}
+.annot-body{flex:1;overflow-y:auto;padding:.7rem .9rem;}
+.ann-item{padding:.6rem .7rem;background:var(--cl);border:1px solid var(--cb2);
+  border-radius:4px;margin-bottom:.4rem;}
+.ann-text{font-family:'Lora',serif;font-size:.78rem;color:var(--tm);font-style:italic;
+  line-height:1.5;margin-bottom:.35rem;display:-webkit-box;
+  -webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.ann-meta{display:flex;align-items:center;justify-content:space-between;gap:.4rem;}
+.ann-code-lbl{font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--gm);background:rgba(45,106,79,.1);
+  border:1px solid rgba(45,106,79,.25);border-radius:10px;padding:.05rem .45rem;}
+.ann-del{background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--tu);
+  padding:.1rem .3rem;border-radius:2px;transition:color .1s;}
+.ann-del:hover{color:var(--am);}
+.ann-empty{text-align:center;padding:2rem 1rem;color:#C4B49A;}
+.annot-ai-sec{border-top:1px solid var(--cb2);padding:.7rem .9rem;}
+.annot-ai-title{font-family:'IBM Plex Mono',monospace;font-size:.53rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--tf);margin-bottom:.45rem;}
+.annot-ai-btn{width:100%;padding:.42rem;font-family:'Cormorant Garamond',serif;
+  font-size:.83rem;letter-spacing:.05em;background:var(--gd);color:var(--cr);
+  border:none;border-radius:3px;cursor:pointer;transition:background .12s;
+  display:flex;align-items:center;justify-content:center;gap:.4rem;}
+.annot-ai-btn:hover:not(:disabled){background:var(--gm);}
+.annot-ai-btn:disabled{opacity:.45;cursor:default;}
+
+/* note editor */
+.note-area{width:100%;min-height:120px;padding:.75rem .9rem;
+  font-family:'Lora',serif;font-size:.85rem;line-height:1.8;color:var(--tx);
+  background:var(--cl);border:1px solid var(--cb);border-radius:4px;
+  resize:vertical;outline:none;transition:border-color .15s;}
+.note-area:focus{border-color:var(--gm);box-shadow:0 0 0 3px rgba(45,106,79,.07);}
+.note-item{border:1px solid var(--cb2);border-radius:5px;padding:.9rem 1rem;
+  margin-bottom:.6rem;background:var(--cl);}
+.note-hdr{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.note-title-input{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;
+  color:var(--tx);background:transparent;border:none;outline:none;
+  border-bottom:1px solid var(--cb2);padding-bottom:.2rem;flex:1;min-width:0;}
+.note-title-input:focus{border-bottom-color:var(--gm);}
+.note-date{font-family:'IBM Plex Mono',monospace;font-size:.53rem;color:var(--tu);white-space:nowrap;}
+.note-codes-row{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.5rem;align-items:center;}
+.note-code-chip{font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.06em;
+  text-transform:uppercase;background:rgba(45,106,79,.1);color:var(--gm);
+  border:1px solid rgba(45,106,79,.25);border-radius:10px;padding:.05rem .45rem;
+  cursor:pointer;display:inline-flex;align-items:center;gap:.2rem;}
+.note-code-chip:hover{background:rgba(45,106,79,.2);}
+.add-code-btn{font-family:'IBM Plex Mono',monospace;font-size:.53rem;letter-spacing:.06em;
+  text-transform:uppercase;background:transparent;border:1px dashed var(--cb);color:var(--tu);
+  border-radius:10px;padding:.05rem .45rem;cursor:pointer;transition:all .12s;}
+.add-code-btn:hover{border-color:var(--gm);color:var(--gm);}
+.note-body{font-family:'Lora',serif;font-size:.85rem;line-height:1.75;color:var(--tx);
+  white-space:pre-wrap;cursor:text;min-height:40px;}
+.note-body-edit{width:100%;font-family:'Lora',serif;font-size:.85rem;line-height:1.75;color:var(--tx);
+  background:transparent;border:none;outline:none;resize:none;min-height:60px;}
+
+/* code popup */
+.code-popup{position:fixed;z-index:300;background:var(--cl);border:1px solid var(--cb);
+  border-radius:6px;padding:.9rem;min-width:220px;box-shadow:0 8px 30px rgba(0,0,0,.15);display:none;}
+.code-popup.visible{display:block;}
+.code-popup-title{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--tf);margin-bottom:.5rem;}
+.code-popup-input{width:100%;padding:.4rem .6rem;font-family:'IBM Plex Mono',monospace;
+  font-size:.78rem;color:var(--tx);background:var(--cr);border:1px solid var(--cb);
+  border-radius:3px;outline:none;margin-bottom:.4rem;}
+.code-popup-input:focus{border-color:var(--gm);}
+.code-suggs{display:flex;flex-wrap:wrap;gap:.25rem;margin-bottom:.5rem;}
+.code-sugg{font-family:'IBM Plex Mono',monospace;font-size:.55rem;text-transform:uppercase;
+  background:rgba(45,106,79,.08);color:var(--gm);border:1px solid rgba(45,106,79,.2);
+  border-radius:10px;padding:.05rem .4rem;cursor:pointer;}
+.code-sugg:hover{background:rgba(45,106,79,.2);}
+.code-popup-actions{display:flex;gap:.4rem;}
+.code-popup-btn{flex:1;padding:.32rem;font-family:'Cormorant Garamond',serif;font-size:.82rem;
+  border-radius:3px;cursor:pointer;transition:all .12s;}
+.code-popup-confirm{background:var(--gd);color:var(--cr);border:1px solid var(--gd);}
+.code-popup-confirm:hover{background:var(--gm);}
+.code-popup-cancel{background:transparent;color:var(--tf);border:1px solid var(--cb2);}
+.code-popup-cancel:hover{border-color:var(--tf);color:var(--tx);}
+
+/* upload zone */
+.upload-zone{border:2px dashed var(--cb);border-radius:8px;padding:1.8rem;text-align:center;
+  cursor:pointer;transition:all .18s;background:rgba(254,250,242,.6);margin-bottom:1.5rem;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--gm);background:rgba(45,106,79,.04);}
+
+/* nube */
+.cat-chip{display:inline-flex;align-items:center;gap:.35em;border-radius:3px;cursor:default;padding:.2em .5em;}
+.cat-count{font-family:'IBM Plex Mono',monospace;font-size:.55rem;opacity:.7;}
+
+/* toast */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+  background:var(--gd);color:var(--cr);font-family:'IBM Plex Mono',monospace;
+  font-size:.7rem;letter-spacing:.06em;padding:.55rem 1.1rem;border-radius:20px;
+  z-index:500;pointer-events:none;transition:opacity .25s,transform .25s;white-space:nowrap;}
+.toast.hidden{opacity:0;transform:translateX(-50%) translateY(8px);}
+
+/* generic */
+.inp{width:100%;padding:.55rem .75rem;font-family:'IBM Plex Mono',monospace;font-size:.78rem;
+  color:var(--tx);background:var(--cl);border:1px solid var(--cb);border-radius:4px;outline:none;}
+.inp:focus{border-color:var(--gm);}
+.gbtn{padding:.4rem .9rem;font-family:'IBM Plex Mono',monospace;font-size:.62rem;
+  letter-spacing:.08em;text-transform:uppercase;border-radius:3px;cursor:pointer;transition:all .12s;}
+.gbtn.green{background:var(--gd);color:var(--cr);border:1px solid var(--gd);}
+.gbtn.green:hover:not(:disabled){background:var(--gm);}
+.gbtn.outline{background:transparent;border:1px solid var(--cb2);color:var(--tf);}
+.gbtn.outline:hover{border-color:var(--gm);color:var(--gm);}
+.gbtn:disabled{opacity:.45;cursor:default;}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="hdr">
+    <div class="hdr-title">Cuaderno <em>Etnográfico</em></div>
+    <div class="hdr-sub">Asistente de investigación cualitativa</div>
+    <div class="hdr-status">
+      <span class="status-dot" id="status-dot" style="background:#B85C38"></span>
+      <span id="status-label">Cargando…</span>
+    </div>
+  </header>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- Code popup -->
+  <div class="code-popup" id="code-popup">
+    <div class="code-popup-title">Asignar código analítico</div>
+    <input class="code-popup-input" id="code-popup-input" placeholder="nombre del código…"/>
+    <div class="code-suggs" id="code-popup-suggs"></div>
+    <div class="code-popup-actions">
+      <button class="code-popup-btn code-popup-confirm" id="code-popup-ok">Asignar</button>
+      <button class="code-popup-btn code-popup-cancel" id="code-popup-cancel">Cancelar</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════════════════
+const API = "https://api.anthropic.com/v1/messages";
+const MODEL = "claude-sonnet-4-20250514";
+
+const MODES = {
+  codificar:{
+    symbol:"◈",label:"Codificar",sub:"Notas de campo",btn:"Buscar pistas",color:"#2D6A4F",
+    placeholder:"Pegá aquí un fragmento de tus notas de campo…\n\nEj: «Llegué al BioCorredor a las 10am. Marta estaba regando las plantas…»",
+    system:`Sos un acompañante metodológico en una investigación etnográfica. Tu rol es ampliar la mirada de quien investiga — no reemplazar su análisis, sino abrirlo.\n\n**PALABRAS QUE RESUENAN**\n4-6 términos, frases o gestos del fragmento que merecen atención especial. Para cada uno, formulá una pregunta abierta.\n\n**POSIBLES ENTRADAS ANALÍTICAS**\n3-4 perspectivas desde las cuales *podría* analizarse este material. Presentalas como opciones, no como la lectura correcta.\n\n**LO QUE QUEDA EN EL BORDE**\n¿Qué no aparece en el fragmento pero podría ser significativo? ¿Qué se dice, qué se calla, qué se presupone?\n\n**PREGUNTAS PARA VOLVER AL CAMPO**\n3-4 preguntas concretas para llevar a la próxima observación.\n\n**UNA CONEXIÓN POSIBLE**\nUn solo autor/a o concepto que *podría* resonar — presentado como apertura, no como respuesta obligatoria.\n\nUsá un tono intelectualmente curioso, nunca autoritativo.\n\n—\nAl terminar, en una línea aparte, escribí exactamente:\n[CATS]: categoría1 | categoría2 | categoría3\n(3-5 categorías analíticas emergentes, separadas por |)`
+  },
+  analizar:{
+    symbol:"◉",label:"Analizar",sub:"Descripción densa",btn:"Abrir el material",color:"#1E3A2F",
+    placeholder:"Pegá aquí el fragmento que querés trabajar en profundidad…",
+    system:`Sos un interlocutor académico en una investigación etnográfica.\n\n**¿QUÉ ESTÁ PASANDO AQUÍ?**\nDescripción densa sin interpretar todavía.\n\n**TENSIONES QUE EL MATERIAL ABRE**\nContradicciones, ambigüedades o paradojas. Nombralas sin resolverlas.\n\n**ESCALAS EN JUEGO**\nCómo se toca lo singular con procesos más amplios.\n\n**PREGUNTAS QUE DEJA ABIERTAS**\n4-5 interrogantes que este fragmento genera.\n\n**SI TUVIERAS QUE APOSTAR UN HILO...**\nCuál sería el nudo analítico más productivo. Presentalo como una apuesta personal.`
+  },
+  citar:{
+    symbol:"◎",label:"Citar",sub:"Referencias",btn:"Formatear cita",color:"#B85C38",
+    placeholder:"Ingresá los datos de la fuente como los tengas (desordenados o incompletos)…",
+    system:`Sos un especialista en normas bibliográficas para ciencias sociales.\n\nA partir de los datos proporcionados (aunque estén incompletos), generá:\n\n**APA 7ma edición**\nReferencia completa + ejemplo de cita en el texto.\n\n**Chicago 17ma ed. — Autor-Fecha**\nReferencia completa + cita en el texto.\n\n**Nota al pie estilo Chicago**\n(Primera mención y siguientes.)\n\nSi faltan datos, indicalo claramente. No inventes información.`
+  },
+  recomendar:{
+    symbol:"◌",label:"Recomendar",sub:"Bibliografía",btn:"Explorar bibliografía",color:"#7B5EA7",
+    placeholder:"Describí el tema, problema o pregunta que estás trabajando…",
+    system:`Sos un/a guía bibliográfico/a para ciencias sociales y antropología latinoamericana.\n\n**CLÁSICOS QUE VALE LA PENA CONOCER**\n3-4 autores/as fundamentales. Para cada uno/a: nombre, contexto, obra de referencia, relevancia.\n\n**PERSPECTIVAS CONTEMPORÁNEAS**\n3-4 autores/as actuales, priorizando voces no-eurocéntricas.\n\n**VOCES LATINOAMERICANAS**\n2-4 perspectivas regionales relevantes.\n\n**CONCEPTOS QUE VALE LA PENA EXPLORAR**\n4-6 marcos conceptuales como herramientas posibles.\n\n**PUNTO DE ENTRADA SUGERIDO**\nUna sola obra para comenzar si no se conoce el campo.`
+  }
+};
+const TOOL_KEYS = ["codificar","analizar","citar","recomendar"];
+const SIDEBAR_ITEMS = [
+  {key:"codificar",sym:"◈",col:"#2D6A4F",name:"Codificar",sub:"Notas de campo"},
+  {key:"analizar",sym:"◉",col:"#1E3A2F",name:"Analizar",sub:"Descripción densa"},
+  {key:"citar",sym:"◎",col:"#B85C38",name:"Citar",sub:"Referencias"},
+  {key:"recomendar",sym:"◌",col:"#7B5EA7",name:"Recomendar",sub:"Bibliografía"},
+  null,
+  {key:"notas",sym:"✎",col:"#2A5A8C",name:"Notas",sub:"Cuaderno",badgeKey:"notes"},
+  {key:"documentos",sym:"◧",col:"#B85C38",name:"Documentos",sub:"Leer y anotar",badgeKey:"docs"},
+  {key:"nube",sym:"◆",col:"#7B5EA7",name:"Nube",sub:"Categorías",badgeKey:"catTotal"},
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════════════════
+let mode = "codificar";
+let input = "";
+let output = "";
+let loading = false;
+let history = [];
+let cats = {};
+let docs = [];
+let notes = [];
+let activeDocId = null;
+let annotTab = "highlights";
+let hlMode = false;
+let codeMode = false;
+let codePopupData = null; // {start,end,text,y,x}
+let errMsg = "";
+let loaded = false;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STORAGE (localStorage)
+// ═══════════════════════════════════════════════════════════════════════════
+const SK = {cats:"etno-cats",docs:"etno-docs",notes:"etno-notes",hist:"etno-hist"};
+function stLoad(key){try{const r=localStorage.getItem(key);return r?JSON.parse(r):null;}catch{return null;}}
+function stSave(key,val){try{localStorage.setItem(key,JSON.stringify(val));}catch{}}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════════════════════
+let toastTimer;
+function showToast(msg){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.add("hidden"),3000);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// API
+// ═══════════════════════════════════════════════════════════════════════════
+async function streamClaude(system,userContent,onChunk){
+  const res=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:MODEL,max_tokens:1800,stream:true,system,messages:[{role:"user",content:userContent}]})});
+  if(!res.ok) throw new Error(`API ${res.status}`);
+  const reader=res.body.getReader(); const dec=new TextDecoder(); let buf="";
+  while(true){
+    const{done,value}=await reader.read(); if(done) break;
+    buf+=dec.decode(value,{stream:true});
+    const lines=buf.split("\n"); buf=lines.pop();
+    for(const l of lines){
+      if(!l.startsWith("data: ")) continue;
+      const d=l.slice(6).trim(); if(d==="[DONE]") return;
+      try{const p=JSON.parse(d);if(p.delta?.text) onChunk(p.delta.text);}catch{}
+    }
+  }
+}
+
+async function callOnce(system,userContent){
+  const res=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:MODEL,max_tokens:1800,system,messages:[{role:"user",content:userContent}]})});
+  const data=await res.json();
+  return data.content?.filter(b=>b.type==="text").map(b=>b.text).join("")||"";
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MARKDOWN
+// ═══════════════════════════════════════════════════════════════════════════
+function renderMd(text){
+  const ri=t=>t
+    .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g,"<em>$1</em>")
+    .replace(/`(.*?)`/g,`<code style="font-family:'IBM Plex Mono',monospace;font-size:.82em;background:#F0EBE0;padding:1px 5px;border-radius:2px;">$1</code>`);
+  let html="";
+  text.split("\n").forEach((line,i)=>{
+    if(/^\*\*[^*]+\*\*$/.test(line.trim()))
+      html+=`<div class="md-sec"${i>0?' style="margin-top:1.4em"':''}">${line.replace(/\*\*/g,"")}</div>`;
+    else if(/^[-•]\s/.test(line))
+      html+=`<div class="md-bul"><span class="md-dot">◦</span><span>${ri(line.replace(/^[-•]\s/,""))}</span></div>`;
+    else if(line.trim()==="")
+      html+=`<div style="height:.5em"></div>`;
+    else
+      html+=`<p style="margin:0 0 .35em">${ri(line)}</p>`;
+  });
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════════════════
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function activeDoc(){return docs.find(d=>d.id===activeDocId)||null;}
+function catTotal(){return Object.values(cats).reduce((s,c)=>s+c,0);}
+
+function persist(){
+  stSave(SK.cats,cats); stSave(SK.docs,docs);
+  stSave(SK.notes,notes); stSave(SK.hist,history.slice(0,12));
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════════════════════════════════════════
+function renderSidebar(){
+  const isMobile=window.innerWidth<640;
+  const sb=document.getElementById("sidebar");
+  let html="";
+  if(!isMobile) html+=`<div class="s-sec">Herramientas</div>`;
+  for(const it of SIDEBAR_ITEMS){
+    if(it===null){if(!isMobile) html+=`<hr class="s-div">`; continue;}
+    let badge=null;
+    if(it.badgeKey==="notes") badge=notes.length||null;
+    else if(it.badgeKey==="docs") badge=docs.length||null;
+    else if(it.badgeKey==="catTotal") badge=catTotal()||null;
+    html+=`<button class="s-btn${mode===it.key?" active":""}" data-key="${it.key}">
+      <span class="s-sym" style="color:${it.col}">${it.sym}</span>
+      <div class="s-texts"><span class="s-name">${it.name}</span><span class="s-sub">${it.sub}</span></div>
+      ${badge?`<span class="s-badge">${badge}</span>`:""}
+    </button>`;
+  }
+  if(!isMobile) html+=`<div class="s-footer">Cuaderno<br>Etnográfico<br>v3.0</div>`;
+  sb.innerHTML=html;
+  sb.querySelectorAll(".s-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const k=btn.dataset.key;
+      mode=k; activeDocId=null; hlMode=false; codeMode=false;
+      if(TOOL_KEYS.includes(k)) output="";
+      render();
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STATUS INDICATOR
+// ═══════════════════════════════════════════════════════════════════════════
+function updateStatus(){
+  const dot=document.getElementById("status-dot");
+  const lbl=document.getElementById("status-label");
+  if(!loaded){dot.style.background="#B85C38";lbl.textContent="Cargando…";}
+  else{dot.style.background="#34A853";dot.style.boxShadow="0 0 4px rgba(52,168,83,.5)";lbl.textContent="Guardado automático";}
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TOOL VIEW
+// ═══════════════════════════════════════════════════════════════════════════
+function renderToolView(){
+  const m=MODES[mode];
+  const hasOutput=!!output;
+  const histHtml=history.length===0
+    ?`<div style="font-family:'Cormorant Garamond',serif;font-size:.8rem;font-style:italic;color:#C4B49A;padding:.3rem;">Tus consultas previas aparecerán aquí</div>`
+    :history.map((h,i)=>`<div class="hist-item" data-hi="${i}">
+        <div style="display:flex;justify-content:space-between;">
+          <span class="hist-mode">${h.symbol} ${h.label}</span>
+          <span class="hist-time">${h.time}</span>
+        </div>
+        <div class="hist-preview">${esc(h.input)}</div>
+      </div>`).join("");
+
+  document.getElementById("content").innerHTML=`
+    <div class="tool-view">
+      <div class="input-zone">
+        <div class="zone-head">
+          <div class="zone-title"><span style="color:${m.color}">${m.symbol}</span> ${m.label} <em>/ ${m.sub}</em></div>
+          <span class="zone-hint">Ctrl+Enter para enviar</span>
+        </div>
+        <textarea id="main-ta" class="field-ta" style="min-height:100px" placeholder="${m.placeholder.replace(/\n/g,"&#10;")}">${esc(input)}</textarea>
+        <div class="zone-actions">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:.55rem;color:var(--tu);" id="char-count">${input.length} caracteres</span>
+          <button id="submit-btn" class="submit-btn" ${loading||!input.trim()?"disabled":""}>
+            ${loading?`<span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span> Pensando…`:`${m.symbol} ${m.btn}`}
+          </button>
+        </div>
+      </div>
+      <div class="output-zone" id="output-zone">
+        <div>
+          <div class="out-head">
+            <span class="out-label">Pistas y aperturas</span>
+            ${hasOutput&&!loading?`<button class="copy-btn" id="copy-out-btn">◎ Copiar</button>`:""}
+          </div>
+          ${errMsg?`<div class="err">${esc(errMsg)}</div>`:""}
+          <div class="out-card${!hasOutput&&!loading?" out-empty":""}" id="out-card">
+            ${!hasOutput&&!loading
+              ?`<div style="text-align:center;color:#C4B49A;">
+                  <div style="font-size:1.8rem;margin-bottom:.4rem;opacity:.35">${m.symbol}</div>
+                  <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;">Las pistas para seguir pensando<br>aparecerán aquí</div>
+                </div>`
+              :`<div id="md-out">${renderMd(output)}</div>${loading?'<span class="cursor-blink"></span>':''}`}
+          </div>
+        </div>
+        <div class="hist-panel">
+          <div class="hist-label">Historial · sesión</div>
+          ${histHtml}
+        </div>
+      </div>
+    </div>`;
+
+  const ta=document.getElementById("main-ta");
+  ta.addEventListener("input",()=>{
+    input=ta.value;
+    document.getElementById("char-count").textContent=`${input.length} caracteres`;
+    document.getElementById("submit-btn").disabled=loading||!input.trim();
+  });
+  ta.addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)) handleSubmit();});
+  document.getElementById("submit-btn").addEventListener("click",handleSubmit);
+  document.getElementById("copy-out-btn")?.addEventListener("click",()=>{navigator.clipboard.writeText(output);showToast("Copiado ✓");});
+  document.querySelectorAll(".hist-item").forEach(el=>{
+    el.addEventListener("click",()=>{
+      const h=history[+el.dataset.hi];
+      mode=h.mode; input=h.input; output=h.output; render();
+    });
+  });
+}
+
+async function handleSubmit(){
+  if(!input.trim()||loading) return;
+  loading=true; output=""; errMsg="";
+  renderToolView();
+  const m=MODES[mode];
+  let acc="";
+  try{
+    await streamClaude(m.system,input.trim(),chunk=>{
+      acc+=chunk; output=acc;
+      const card=document.getElementById("out-card");
+      const oz=document.getElementById("output-zone");
+      if(card){
+        card.classList.remove("out-empty");
+        card.innerHTML=`<div id="md-out">${renderMd(acc)}</div><span class="cursor-blink"></span>`;
+      }
+      if(oz) oz.scrollTop=oz.scrollHeight;
+    });
+    if(mode==="codificar"){
+      const cm=acc.match(/\[CATS\]:\s*(.+)/);
+      if(cm){
+        const nc=cm[1].split("|").map(c=>c.trim()).filter(Boolean);
+        nc.forEach(k=>{const kk=k.toLowerCase();cats[kk]=(cats[kk]||0)+1;});
+        showToast(`${nc.length} categoría${nc.length!==1?"s":""} guardada${nc.length!==1?"s":""} ✓`);
+        acc=acc.replace(/\n?\[CATS\]:.*$/,"").trim();
+        output=acc;
+      }
+    }
+    history=[{mode,label:m.label,symbol:m.symbol,input:input.trim(),output:acc,
+      time:new Date().toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"})},...history].slice(0,12);
+    persist();
+  }catch(e){errMsg="⚠ Error al conectar con la API. Verificá tu conexión.";}
+  loading=false;
+  render();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NOTAS VIEW
+// ═══════════════════════════════════════════════════════════════════════════
+function renderNotasView(){
+  const c=document.getElementById("content");
+  c.innerHTML=`<div class="alt-view" id="notas-view">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.3rem;flex-wrap:wrap;gap:.5rem;">
+      <div>
+        <div class="alt-title">✎ Cuaderno de notas</div>
+        <div class="alt-sub" id="notas-sub">${notes.length} nota${notes.length!==1?"s":""} · guardadas automáticamente</div>
+      </div>
+      <button class="gbtn green" id="add-note-btn">+ Nueva nota</button>
+    </div>
+    <div id="notes-list"></div>
+  </div>`;
+  document.getElementById("add-note-btn").addEventListener("click",()=>{
+    const n={id:"note_"+Date.now(),title:"Nueva nota",body:"",codes:[],
+      date:new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"2-digit"})};
+    notes=[n,...notes]; persist(); renderNotasView();
+  });
+  renderNotesList();
+}
+
+function renderNotesList(){
+  const list=document.getElementById("notes-list");
+  if(!list) return;
+  if(notes.length===0){
+    list.innerHTML=`<div style="text-align:center;padding:3rem 1rem;color:#C4B49A;">
+      <div style="font-size:2rem;margin-bottom:.5rem;opacity:.35">✎</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;">
+        Tus notas de campo aparecerán aquí.<br>Podés codificarlas manualmente o con IA.
+      </div></div>`;
+    return;
+  }
+  list.innerHTML=notes.map(n=>buildNoteHtml(n)).join("");
+  bindNoteEvents();
+}
+
+function buildNoteHtml(n){
+  const codesHtml=(n.codes||[]).map(c=>`<span class="note-code-chip" data-nid="${n.id}" data-code="${esc(c)}">${esc(c)} <span style="opacity:.5;font-size:.6rem">✕</span></span>`).join("");
+  return `<div class="note-item" id="note-${n.id}">
+    <div class="note-hdr">
+      <input class="note-title-input" value="${esc(n.title)}" data-nid="${n.id}" placeholder="Sin título"/>
+      <span class="note-date">${n.date}</span>
+      <button class="gbtn outline" style="font-size:.52rem;padding:.2rem .5rem;" data-edit="${n.id}">Editar</button>
+      <button class="ann-del" data-del-note="${n.id}">✕</button>
+    </div>
+    <div class="note-codes-row" id="codes-row-${n.id}">
+      ${codesHtml}
+      <span id="code-adder-${n.id}">
+        <button class="add-code-btn" data-add-code="${n.id}">+ código</button>
+      </span>
+      <button class="add-code-btn" style="border-color:rgba(45,106,79,.3);color:var(--gm);" data-ai-code="${n.id}">◈ IA</button>
+    </div>
+    <div class="note-body" id="note-body-${n.id}" data-nid="${n.id}">${esc(n.body)||'<em style="color:var(--tu);font-size:.82rem">Hacé clic para editar…</em>'}</div>
+  </div>`;
+}
+
+function bindNoteEvents(){
+  // title change
+  document.querySelectorAll(".note-title-input").forEach(inp=>{
+    inp.addEventListener("blur",()=>{
+      const nid=inp.dataset.nid;
+      const n=notes.find(x=>x.id===nid); if(!n) return;
+      n.title=inp.value; persist();
+    });
+  });
+  // edit / save body
+  document.querySelectorAll("[data-edit]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const nid=btn.dataset.edit;
+      const n=notes.find(x=>x.id===nid); if(!n) return;
+      const bodyEl=document.getElementById(`note-body-${nid}`);
+      if(btn.textContent.trim()==="Editar"){
+        bodyEl.innerHTML=`<textarea class="note-body-edit" rows="${Math.max(4,n.body.split('\n').length+1)}">${esc(n.body)}</textarea>`;
+        btn.textContent="✓ Guardar";
+      } else {
+        const ta=bodyEl.querySelector("textarea");
+        n.body=ta.value;
+        bodyEl.innerHTML=esc(n.body)||'<em style="color:var(--tu);font-size:.82rem">Hacé clic para editar…</em>';
+        btn.textContent="Editar";
+        persist();
+      }
+    });
+  });
+  // click body to edit
+  document.querySelectorAll(".note-body").forEach(bd=>{
+    bd.addEventListener("click",()=>{
+      const nid=bd.dataset.nid; const n=notes.find(x=>x.id===nid); if(!n) return;
+      if(bd.querySelector("textarea")) return; // already editing
+      const btn=document.querySelector(`[data-edit="${nid}"]`);
+      if(btn) btn.click();
+    });
+  });
+  // delete note
+  document.querySelectorAll("[data-del-note]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const nid=btn.dataset.delNote;
+      notes=notes.filter(n=>n.id!==nid); persist(); showToast("Nota eliminada"); renderNotesList();
+    });
+  });
+  // remove code chip
+  document.querySelectorAll(".note-code-chip").forEach(chip=>{
+    chip.addEventListener("click",()=>{
+      const nid=chip.dataset.nid, code=chip.dataset.code;
+      const n=notes.find(x=>x.id===nid); if(!n) return;
+      n.codes=n.codes.filter(c=>c!==code); persist(); renderNotesList();
+    });
+  });
+  // add code manually
+  document.querySelectorAll("[data-add-code]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const nid=btn.dataset.addCode;
+      const span=document.getElementById(`code-adder-${nid}`);
+      span.innerHTML=`<input style="width:90px;padding:.05rem .3rem;font-family:'IBM Plex Mono',monospace;font-size:.62rem;background:var(--cl);border:1px solid var(--cb);border-radius:3px;outline:none;" id="code-input-${nid}" placeholder="código…"/>
+        <button style="padding:.1rem .4rem;font-size:.6rem;border-radius:3px;background:var(--gd);color:var(--cr);border:1px solid var(--gd);cursor:pointer;" data-save-code="${nid}">+</button>
+        <button style="padding:.1rem .4rem;font-size:.6rem;border-radius:3px;background:transparent;border:1px solid var(--cb2);color:var(--tf);cursor:pointer;" data-cancel-code="${nid}">✕</button>`;
+      const cinp=document.getElementById(`code-input-${nid}`);
+      cinp.focus();
+      cinp.addEventListener("keydown",e=>{if(e.key==="Enter") saveCodeInline(nid,cinp.value);if(e.key==="Escape") renderNotesList();});
+      document.querySelector(`[data-save-code="${nid}"]`).addEventListener("click",()=>saveCodeInline(nid,cinp.value));
+      document.querySelector(`[data-cancel-code="${nid}"]`).addEventListener("click",()=>renderNotesList());
+    });
+  });
+  // AI code note
+  document.querySelectorAll("[data-ai-code]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const nid=btn.dataset.aiCode;
+      const n=notes.find(x=>x.id===nid); if(n) aiCodeNote(n);
+    });
+  });
+}
+
+function saveCodeInline(nid,val){
+  const c=val.trim().toLowerCase(); if(!c) return;
+  const n=notes.find(x=>x.id===nid); if(!n) return;
+  n.codes=[...new Set([...(n.codes||[]),c])];
+  cats[c]=(cats[c]||0)+1; persist(); renderNotesList();
+}
+
+async function aiCodeNote(note){
+  showToast("La IA está sugiriendo códigos…");
+  try{
+    const res=await callOnce(
+      "Sos un analista cualitativo etnográfico. Devolvé SOLO JSON: {\"codes\":[\"código1\",\"código2\"]}. Sin markdown, sin backticks.",
+      `Nota de campo:\nTítulo: ${note.title}\n\n${note.body}\n\nSugerí 3-5 códigos analíticos breves (1-3 palabras). Solo JSON.`
+    );
+    let codes=[];
+    try{const clean=res.replace(/```json|```/g,"").trim();codes=JSON.parse(clean).codes||[];}
+    catch{codes=res.match(/["']([^"']{2,40})["']/g)?.map(c=>c.replace(/["']/g,""))||[];}
+    if(codes.length===0){showToast("No se pudieron generar códigos");return;}
+    const n=notes.find(x=>x.id===note.id); if(!n) return;
+    const newCodes=[...new Set([...(n.codes||[]),...codes.map(c=>c.toLowerCase())])];
+    n.codes=newCodes;
+    codes.forEach(c=>{const k=c.toLowerCase();cats[k]=(cats[k]||0)+1;});
+    persist(); showToast(`${codes.length} códigos sugeridos ✓`); renderNotesList();
+  }catch{showToast("Error al generar códigos");}
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DOCUMENTS VIEW
+// ═══════════════════════════════════════════════════════════════════════════
+function renderDocListView(){
+  document.getElementById("content").innerHTML=`
+    <div class="alt-view">
+      <div class="alt-title">◧ Documentos</div>
+      <div class="alt-sub">Subí, leé y anotá tus materiales de campo · TXT · MD · PDF</div>
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" id="doc-file-input" accept=".txt,.md,.csv,.pdf" multiple style="display:none"/>
+        <div style="font-size:1.6rem;margin-bottom:.5rem;opacity:.4">◧</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:300;color:var(--tm);margin-bottom:.25rem;">
+          Arrastrá archivos o hacé clic para cargar
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tu);">
+          TXT · MD · CSV · PDF (la IA extrae el texto)
+        </div>
+      </div>
+      <div id="docs-list">
+        ${docs.length===0
+          ?`<div style="text-align:center;padding:1.5rem;color:#C4B49A;font-family:'Cormorant Garamond',serif;font-style:italic;">Aún no cargaste ningún documento</div>`
+          :docs.map(doc=>`
+            <div style="padding:.85rem 1rem;border:1px solid var(--cb2);border-radius:4px;margin-bottom:.4rem;background:var(--cl);display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+              <div style="overflow:hidden;">
+                <div style="font-family:'Lora',serif;font-size:.88rem;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(doc.name)}</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:.53rem;color:var(--tu);margin-top:.2rem;letter-spacing:.06em;">
+                  ${doc.annotations.length} anotacion${doc.annotations.length!==1?"es":""} · ${doc.text.length} chars
+                </div>
+              </div>
+              <div style="display:flex;gap:.4rem;flex-shrink:0;">
+                <button class="dtb outline" data-open-doc="${doc.id}">→ Abrir</button>
+                <button class="dtb danger" data-del-doc="${doc.id}">✕</button>
+              </div>
+            </div>`).join("")}
+      </div>
+    </div>`;
+
+  const uz=document.getElementById("upload-zone");
+  const fi=document.getElementById("doc-file-input");
+  uz.addEventListener("click",()=>fi.click());
+  fi.addEventListener("change",e=>handleFileUpload([...e.target.files]));
+  uz.addEventListener("dragover",e=>{e.preventDefault();uz.classList.add("drag");});
+  uz.addEventListener("dragleave",()=>uz.classList.remove("drag"));
+  uz.addEventListener("drop",e=>{e.preventDefault();uz.classList.remove("drag");handleFileUpload([...e.dataTransfer.files]);});
+  document.querySelectorAll("[data-open-doc]").forEach(btn=>{
+    btn.addEventListener("click",()=>{activeDocId=btn.dataset.openDoc;hlMode=false;codeMode=false;render();});
+  });
+  document.querySelectorAll("[data-del-doc]").forEach(btn=>{
+    btn.addEventListener("click",()=>{docs=docs.filter(d=>d.id!==btn.dataset.delDoc);persist();showToast("Documento eliminado");renderDocListView();});
+  });
+}
+
+async function handleFileUpload(files){
+  for(const file of files){
+    const ext=file.name.split(".").pop().toLowerCase();
+    let text="";
+    if(ext==="pdf"){
+      const b64=await new Promise((res,rej)=>{
+        const r=new FileReader();
+        r.onload=()=>res(r.result.split(",")[1]);
+        r.onerror=()=>rej(new Error("Read failed"));
+        r.readAsDataURL(file);
+      });
+      showToast("Extrayendo texto del PDF con IA…");
+      try{
+        const apiRes=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({model:MODEL,max_tokens:4000,
+            messages:[{role:"user",content:[
+              {type:"document",source:{type:"base64",media_type:"application/pdf",data:b64}},
+              {type:"text",text:"Extraé todo el texto de este PDF. Devolvé SOLO el texto, sin comentarios, sin formato extra. Conservá los párrafos con saltos de línea dobles."}
+            ]}]})});
+        const data=await apiRes.json();
+        text=data.content?.filter(b=>b.type==="text").map(b=>b.text).join("")||"";
+        if(!text){showToast("No se pudo extraer texto del PDF");continue;}
+      }catch{showToast("Error al procesar el PDF");continue;}
+    }else{
+      text=await file.text();
+    }
+    const doc={id:"doc_"+Date.now()+"_"+Math.random().toString(36).slice(2),name:file.name,text,annotations:[]};
+    docs=[...docs,doc]; persist(); showToast(`"${file.name}" cargado ✓`);
+    activeDocId=doc.id; hlMode=false; codeMode=false; render(); return;
+  }
+  if(mode==="documentos") renderDocListView();
+  renderSidebar();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DOC READER
+// ═══════════════════════════════════════════════════════════════════════════
+function buildAnnotatedHtml(doc){
+  const sorted=[...doc.annotations].sort((a,b)=>a.start-b.start);
+  let result="",pos=0;
+  for(const ann of sorted){
+    if(ann.start<pos) continue;
+    result+=esc(doc.text.slice(pos,ann.start));
+    const t=esc(doc.text.slice(ann.start,ann.end));
+    if(ann.type==="highlight") result+=`<mark class="hl-y" data-ann="${ann.id}">${t}</mark>`;
+    else result+=`<mark class="hl-g" data-ann="${ann.id}">${t}<span class="code-tag" data-ann="${ann.id}">${esc(ann.code)}</span></mark>`;
+    pos=ann.end;
+  }
+  result+=esc(doc.text.slice(pos));
+  return result.split(/\n\n+/).map(p=>`<p>${p.replace(/\n/g,"<br>")}</p>`).join("");
+}
+
+function refreshDocBody(){
+  const doc=activeDoc(); if(!doc) return;
+  const body=document.getElementById("doc-body");
+  if(body){body.innerHTML=buildAnnotatedHtml(doc);bindDocBodyClicks();}
+  refreshAnnotPanel();
+}
+
+function renderDocReaderView(){
+  const doc=activeDoc(); if(!doc) return;
+  const hi=doc.annotations.filter(a=>a.type==="highlight");
+  const co=doc.annotations.filter(a=>a.type==="code");
+  document.getElementById("content").innerHTML=`
+    <div class="doc-view">
+      <div class="doc-reader">
+        <div class="doc-toolbar">
+          <button class="dtb outline" id="doc-back">← Volver</button>
+          <div class="doc-toolbar-title">${esc(doc.name)}</div>
+          <button class="${"dtb hl-"+(hlMode?"on":"off")}" id="hl-btn">◑ Resaltar</button>
+          <button class="${"dtb code-"+(codeMode?"on":"off")}" id="code-btn">◈ Codificar</button>
+          <button class="dtb outline" id="doc-send-btn">↗ Analizar</button>
+          <button class="dtb outline" id="doc-export-btn">⬇ Exportar</button>
+        </div>
+        <div id="doc-body" class="doc-body" spellcheck="false">${buildAnnotatedHtml(doc)}</div>
+      </div>
+      <div class="annot-panel">
+        <div class="annot-hdr">
+          <div class="annot-hdr-title">Anotaciones</div>
+          <div class="annot-tabs">
+            <div class="ann-tab${annotTab==="highlights"?" active":""}" data-atab="highlights">Resaltados ${hi.length>0?`(${hi.length})`:""}</div>
+            <div class="ann-tab${annotTab==="codes"?" active":""}" data-atab="codes">Códigos ${co.length>0?`(${co.length})`:""}</div>
+          </div>
+        </div>
+        <div class="annot-body" id="annot-body"></div>
+        <div class="annot-ai-sec">
+          <div class="annot-ai-title">Análisis con IA</div>
+          <button class="annot-ai-btn" id="annot-ai-btn" ${doc.annotations.length===0?"disabled":""}>◈ Codificar anotaciones</button>
+        </div>
+      </div>
+    </div>`;
+
+  renderAnnotPanel();
+  bindDocBodyClicks();
+
+  document.getElementById("doc-back").addEventListener("click",()=>{activeDocId=null;hlMode=false;codeMode=false;render();});
+
+  document.getElementById("hl-btn").addEventListener("click",()=>{
+    hlMode=!hlMode; if(hlMode) codeMode=false;
+    document.getElementById("hl-btn").className="dtb hl-"+(hlMode?"on":"off");
+    document.getElementById("code-btn").className="dtb code-off";
+    showToast(hlMode?"Modo resaltar activado — seleccioná texto":"Modo resaltar desactivado");
+  });
+  document.getElementById("code-btn").addEventListener("click",()=>{
+    codeMode=!codeMode; if(codeMode) hlMode=false;
+    document.getElementById("code-btn").className="dtb code-"+(codeMode?"on":"off");
+    document.getElementById("hl-btn").className="dtb hl-off";
+    showToast(codeMode?"Modo codificar activado — seleccioná texto":"Modo codificar desactivado");
+  });
+  document.getElementById("doc-send-btn").addEventListener("click",()=>{
+    const sel=window.getSelection()?.toString().trim();
+    const doc=activeDoc();
+    mode="analizar";
+    input=sel||doc?.text.slice(0,3000)||"";
+    output=""; activeDocId=null;
+    render();
+  });
+  document.getElementById("doc-export-btn").addEventListener("click",exportAnnotations);
+  document.getElementById("annot-ai-btn").addEventListener("click",aiCodifyAnnotations);
+  document.querySelectorAll(".ann-tab").forEach(tab=>{
+    tab.addEventListener("click",()=>{annotTab=tab.dataset.atab;refreshAnnotPanel();updateAnnotTabs();});
+  });
+
+  // text selection
+  const body=document.getElementById("doc-body");
+  body.addEventListener("mouseup",handleDocSelection);
+  body.addEventListener("touchend",handleDocSelection);
+}
+
+function bindDocBodyClicks(){
+  const body=document.getElementById("doc-body"); if(!body) return;
+  body.addEventListener("mouseup",handleDocSelection);
+  body.addEventListener("touchend",handleDocSelection);
+  body.addEventListener("click",e=>{
+    if(e.target.classList.contains("code-tag")){removeAnnotation(e.target.dataset.ann);return;}
+    if(!hlMode&&!codeMode){
+      const mark=e.target.closest("[data-ann]");
+      if(mark) removeAnnotation(mark.dataset.ann);
+    }
+  });
+}
+
+function handleDocSelection(e){
+  if(!hlMode&&!codeMode) return;
+  if(e.target.classList.contains("code-tag")||e.target.closest("[data-ann]")&&!hlMode&&!codeMode) return;
+  const sel=window.getSelection();
+  if(!sel||sel.isCollapsed) return;
+  const range=sel.getRangeAt(0);
+  const body=document.getElementById("doc-body");
+  if(!body||!body.contains(range.startContainer)) return;
+  const txt=range.toString().trim(); if(!txt||txt.length<2) return;
+
+  // get offsets
+  let startOff=-1,endOff=-1,acc=0;
+  const walker=document.createTreeWalker(body,NodeFilter.SHOW_TEXT);
+  let node;
+  while((node=walker.nextNode())){
+    const len=node.textContent.length;
+    if(node===range.startContainer) startOff=acc+range.startOffset;
+    if(node===range.endContainer){endOff=acc+range.endOffset;break;}
+    acc+=len;
+  }
+  if(startOff===-1){
+    const doc=activeDoc(); if(!doc) return;
+    const idx=doc.text.indexOf(txt);
+    if(idx===-1){sel.removeAllRanges();return;}
+    startOff=idx; endOff=idx+txt.length;
+  }
+  const rect=range.getBoundingClientRect();
+  sel.removeAllRanges();
+
+  if(hlMode){
+    addAnnotation({type:"highlight",start:startOff,end:endOff,text:txt});
+  } else if(codeMode){
+    codePopupData={start:startOff,end:endOff,text:txt,y:rect.bottom+window.scrollY+8,x:rect.left+window.scrollX};
+    showCodePopup();
+  }
+}
+
+function addAnnotation(ann){
+  const doc=activeDoc(); if(!doc) return;
+  ann.id="ann_"+Date.now()+"_"+Math.random().toString(36).slice(2);
+  doc.annotations=[...doc.annotations,ann];
+  persist(); refreshDocBody();
+  showToast(ann.type==="highlight"?"Texto resaltado ✓":`Código "${ann.code}" asignado ✓`);
+}
+
+function removeAnnotation(annId){
+  const doc=activeDoc(); if(!doc) return;
+  doc.annotations=doc.annotations.filter(a=>a.id!==annId);
+  persist(); refreshDocBody(); showToast("Anotación eliminada");
+}
+
+function renderAnnotPanel(){
+  const doc=activeDoc(); if(!doc) return;
+  const ab=document.getElementById("annot-body"); if(!ab) return;
+  const items=doc.annotations.filter(a=>annotTab==="highlights"?a.type==="highlight":a.type==="code");
+  if(items.length===0){
+    ab.innerHTML=`<div class="ann-empty">
+      <div style="font-size:1.5rem;margin-bottom:.4rem;opacity:.3">${annotTab==="highlights"?"◑":"◈"}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.85rem;">
+        ${annotTab==="highlights"?"Activá el modo Resaltar y seleccioná texto":"Activá el modo Codificar y seleccioná texto"}
+      </div></div>`;
+    return;
+  }
+  ab.innerHTML=items.map(ann=>`
+    <div class="ann-item">
+      <div class="ann-text">"${esc(ann.text)}"</div>
+      <div class="ann-meta">
+        ${ann.type==="code"?`<span class="ann-code-lbl">${esc(ann.code)}</span>`:"<span></span>"}
+        <button class="ann-del" data-ann-del="${ann.id}">✕</button>
+      </div>
+    </div>`).join("");
+  ab.querySelectorAll("[data-ann-del]").forEach(btn=>{
+    btn.addEventListener("click",()=>removeAnnotation(btn.dataset.annDel));
+  });
+}
+
+function updateAnnotTabs(){
+  const doc=activeDoc(); if(!doc) return;
+  const hi=doc.annotations.filter(a=>a.type==="highlight");
+  const co=doc.annotations.filter(a=>a.type==="code");
+  document.querySelectorAll(".ann-tab").forEach(tab=>{
+    tab.classList.toggle("active",tab.dataset.atab===annotTab);
+    if(tab.dataset.atab==="highlights") tab.textContent=`Resaltados ${hi.length>0?`(${hi.length})`:""}`;
+    else tab.textContent=`Códigos ${co.length>0?`(${co.length})`:""}`;
+  });
+  const aibtn=document.getElementById("annot-ai-btn");
+  if(aibtn) aibtn.disabled=doc.annotations.length===0;
+}
+
+function refreshAnnotPanel(){
+  renderAnnotPanel(); updateAnnotTabs();
+}
+
+function exportAnnotations(){
+  const doc=activeDoc(); if(!doc) return;
+  const lines=[`# Anotaciones: ${doc.name}`,`Exportado: ${new Date().toLocaleString("es-AR")}`,""]; 
+  const hl=doc.annotations.filter(a=>a.type==="highlight");
+  const cd=doc.annotations.filter(a=>a.type==="code");
+  if(hl.length){lines.push("## Resaltados");hl.forEach(a=>lines.push(`- "${a.text}"`));lines.push("");}
+  if(cd.length){lines.push("## Códigos");cd.forEach(a=>lines.push(`- [${a.code}] "${a.text}"`));}
+  const blob=new Blob([lines.join("\n")],{type:"text/plain"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=`anotaciones-${doc.name}.txt`;a.click();
+  URL.revokeObjectURL(url);
+  showToast("Anotaciones exportadas ✓");
+}
+
+async function aiCodifyAnnotations(){
+  const doc=activeDoc(); if(!doc||doc.annotations.length===0) return;
+  const btn=document.getElementById("annot-ai-btn");
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span> Analizando…';}
+  const annotText=doc.annotations.map((a,i)=>`${i+1}. [${a.type}${a.type==="code"?` / ${a.code}`:""}]: "${a.text}"`).join("\n");
+  try{
+    const res=await callOnce(
+      "Sos un acompañante metodológico en una investigación etnográfica.",
+      `Documento: "${doc.name}"\n\nAnotaciones marcadas:\n${annotText}\n\n**PATRONES QUE EMERGEN**\n3-5 códigos analíticos que agrupan estas anotaciones.\n\n**CONEXIONES ENTRE ANOTACIONES**\nTensiones o contradicciones.\n\n**SIGUIENTE PASO SUGERIDO**\nUna sola pregunta analítica.`
+    );
+    mode="codificar"; input=`[Análisis de anotaciones: ${doc.name}]\n\n${annotText}`; output=res;
+    activeDocId=null; render(); showToast("Análisis de anotaciones listo ✓");
+  }catch{showToast("Error al analizar. Verificá tu conexión.");if(btn){btn.disabled=false;btn.innerHTML="◈ Codificar anotaciones";}}
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CODE POPUP
+// ═══════════════════════════════════════════════════════════════════════════
+function showCodePopup(){
+  const popup=document.getElementById("code-popup");
+  const inp=document.getElementById("code-popup-input");
+  const suggs=document.getElementById("code-popup-suggs");
+  popup.style.top=(codePopupData.y)+"px";
+  popup.style.left=Math.min(codePopupData.x,window.innerWidth-250)+"px";
+  const doc=activeDoc();
+  const existingCodes=doc?[...new Set(doc.annotations.filter(a=>a.type==="code").map(a=>a.code))]:[];
+  const catKeys=Object.keys(cats).slice(0,5);
+  const allSuggs=[...new Set([...existingCodes,...catKeys])].slice(0,8);
+  if(allSuggs.length>0){
+    suggs.innerHTML=allSuggs.map(c=>`<span class="code-sugg">${esc(c)}</span>`).join("");
+    suggs.querySelectorAll(".code-sugg").forEach(s=>s.addEventListener("click",()=>{inp.value=s.textContent;inp.focus();}));
+  } else suggs.innerHTML="";
+  inp.value=""; popup.classList.add("visible");
+  setTimeout(()=>inp.focus(),50);
+}
+function hideCodePopup(){document.getElementById("code-popup").classList.remove("visible");codePopupData=null;}
+function confirmCode(){
+  const val=document.getElementById("code-popup-input").value.trim();
+  if(!val||!codePopupData){hideCodePopup();return;}
+  addAnnotation({type:"code",start:codePopupData.start,end:codePopupData.end,text:codePopupData.text,code:val});
+  cats[val.toLowerCase()]=(cats[val.toLowerCase()]||0)+1;
+  persist(); hideCodePopup();
+}
+document.getElementById("code-popup-ok").addEventListener("click",confirmCode);
+document.getElementById("code-popup-cancel").addEventListener("click",hideCodePopup);
+document.getElementById("code-popup-input").addEventListener("keydown",e=>{if(e.key==="Enter") confirmCode();if(e.key==="Escape") hideCodePopup();});
+document.addEventListener("click",e=>{
+  const popup=document.getElementById("code-popup");
+  if(popup.classList.contains("visible")&&!popup.contains(e.target)) hideCodePopup();
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// NUBE
+// ═══════════════════════════════════════════════════════════════════════════
+function renderNubeView(){
+  const entries=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+  const colors=["#1E3A2F","#2D6A4F","#B85C38","#7B5EA7","#2A5A8C","#6B4423","#3A6A3A","#8C4A2A"];
+  const max=entries.length>0?entries[0][1]:1;
+  const total=entries.reduce((s,[,c])=>s+c,0);
+  let inner="";
+  if(entries.length===0){
+    inner=`<div style="text-align:center;padding:3rem 1rem;color:#C4B49A;">
+      <div style="font-size:2.2rem;margin-bottom:.5rem;opacity:.35">◈</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;">
+        Las categorías aparecerán aquí<br>cuando codifiques tus notas o documentos
+      </div></div>`;
+  } else {
+    const cloud=entries.map(([cat,count],i)=>{
+      const scale=0.75+(count/max)*0.85; const color=colors[i%colors.length];
+      return `<span class="cat-chip" style="font-family:'Cormorant Garamond',serif;font-size:${scale*1.05}rem;font-weight:${count>2?600:400};color:${color};background:${color}12;border:1px solid ${color}30;">
+        ${esc(cat)}<span class="cat-count">×${count}</span>
+      </span>`;
+    }).join("");
+    const bars=entries.slice(0,12).map(([cat,count])=>`
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.4rem;">
+        <div style="font-family:'Lora',serif;font-size:.78rem;color:var(--tx);width:150px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(cat)}</div>
+        <div style="flex:1;height:4px;background:#E8E0D0;border-radius:2px;overflow:hidden;">
+          <div style="height:100%;width:${(count/max)*100}%;background:#2D6A4F;border-radius:2px;"></div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.63rem;color:#8A7A68;width:20px;text-align:right;">${count}</div>
+      </div>`).join("");
+    inner=`<div style="margin-bottom:1.5rem;display:flex;flex-wrap:wrap;gap:.55rem;line-height:1.6;">${cloud}</div>
+      <div style="border-top:1px solid #E0D5C0;padding-top:1rem;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:#8A7A68;margin-bottom:.7rem;">Ranking de frecuencia</div>
+        ${bars}
+      </div>
+      <div style="margin-top:1.2rem;display:flex;justify-content:flex-end;">
+        <button class="gbtn outline" style="font-size:.58rem;" id="clear-cats-btn">Limpiar todo</button>
+      </div>`;
+  }
+  document.getElementById("content").innerHTML=`
+    <div class="alt-view">
+      <div class="alt-title">◆ Nube de categorías</div>
+      <div class="alt-sub">${entries.length} categorías · ${total} menciones totales</div>
+      ${inner}
+    </div>`;
+  document.getElementById("clear-cats-btn")?.addEventListener("click",()=>{cats={};persist();showToast("Nube reiniciada");renderNubeView();renderSidebar();});
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MAIN RENDER
+// ═══════════════════════════════════════════════════════════════════════════
+function render(){
+  renderSidebar();
+  if(TOOL_KEYS.includes(mode)) renderToolView();
+  else if(mode==="notas") renderNotasView();
+  else if(mode==="documentos") activeDocId?renderDocReaderView():renderDocListView();
+  else if(mode==="nube") renderNubeView();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════════
+(function init(){
+  const c=stLoad(SK.cats); if(c) cats=c;
+  const d=stLoad(SK.docs); if(d) docs=d;
+  const n=stLoad(SK.notes); if(n) notes=n;
+  const h=stLoad(SK.hist); if(h) history=h;
+  loaded=true;
+  updateStatus();
+  render();
+})();
+
+// Responsive sidebar re-render on resize
+window.addEventListener("resize",()=>renderSidebar());
+</script>
+</body>
+</html>
